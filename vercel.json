@@ -22,10 +22,7 @@
       {
         "src": "/(.*)",
         "dest": "ice/wsgi.py"
-      },
-      {
-        "src": "/media/(.*)",
-        "dest": "/media/$1"
       }
+      
     ]
   }
