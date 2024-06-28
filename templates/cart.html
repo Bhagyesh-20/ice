@@ -1,0 +1,157 @@
+    {% extends "base.html" %}
+    {% block title %}Cart{% endblock title %}
+    {% block body %}
+    <body class="bg-body-tertiary">
+        <div class="container">
+            <main>
+                <div class="py-5 text-center">
+                    <h2>Cart</h2>
+                    <p class="lead">Please make sure to leave feedback</p>
+                </div>
+
+                <div class="row g-5">
+                    <div class="col-md-5 col-lg-4 order-md-last">
+                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-primary">Your cart</span>
+                        </h4>
+
+                        <div id="items"></div>
+                        <div class="col-sm-6 my-2">
+                            <button id="clearCartbtn" class="btn btn-danger">Clear Cart</button>
+                        </div>
+                    </div>
+                    <div class="col-md-7 col-lg-8">
+                        <h4 class="mb-3">Billing address</h4>
+                        <form method="post" action="checkout">
+                            {% csrf_token %}
+                            <input type="hidden" name="itemsJson" id="itemsJson">
+                            <input type="hidden" name="amount" id="amount">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="" value=""
+                                        required="">
+                                    <div class="invalid-feedback">
+                                        Valid Name is required.
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" id="email"
+                                        placeholder="you@example.com">
+                                    <div class="invalid-feedback">
+                                        Please enter a valid email address for shipping updates.
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address"
+                                        placeholder="1234 Main St" required="">
+                                    <div class="invalid-feedback">
+                                        Please enter your shipping address.
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="city" class="form-label">City</label>
+                                    <input type="text" class="form-control" name="city" id="city" placeholder="City">
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="my-5 pt-5 text-body-secondary text-center text-small">
+                <p class="mb-1">©2024 BIce</p>
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="#">Privacy</a></li>
+                    <li class="list-inline-item"><a href="#">Terms</a></li>
+                    <li class="list-inline-item"><a href="#">Support</a></li>
+                </ul>
+            </footer>
+        </div>
+    </body>
+
+    {% endblock body %}
+
+    {% block js %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Check if cart exists in localStorage
+            var cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : {};
+
+            // Update cart count initially
+            updateCartCount();
+
+            // Event listener for the Clear Cart button
+            $('#clearCartbtn').click(function(event) {
+                event.preventDefault(); // Prevent the default form submission behavior
+                clearCart(); // Call the clearCart function
+            });
+
+            // Event listener for the form submission (checkout button)
+            $('form').submit(function(event) {
+                $('#itemsJson').val(JSON.stringify(cart));
+                localStorage.removeItem('cart'); // Remove cart data from localStorage
+                window.location.href = $(this).attr('action'); // Redirect to the checkout page
+            });
+
+            // Function to clear the cart
+            function clearCart() {
+                cart = {}; // Reset the cart object
+                localStorage.removeItem('cart'); // Remove cart data from localStorage
+                $('#items').empty(); // Clear the items display in the UI
+                updateCartCount(); // Update cart count (should now be 0)
+                displayEmptyCartMessage(); // Display empty cart message
+            }
+
+            // Function to update cart count
+            function updateCartCount() {
+                var cartCount = Object.keys(cart).reduce(function(sum, key) {
+                    return sum + cart[key][0];
+                }, 0);
+                document.getElementById('cart').innerHTML = cartCount;
+                if (cartCount === 0) {
+                    displayEmptyCartMessage(); // Display empty cart message if cart is empty
+                }
+            }
+
+            // Function to display empty cart message
+            function displayEmptyCartMessage() {
+                $('#items').html('<p>Your cart is empty!!!</p>');
+            }
+
+            // Display existing items in the cart and calculate total price
+            for (var item in cart) {
+                var itemHtml = `<ul class="list-group mb-1">
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">${item}</h6>
+                            <small class="text-body-secondary">Price per piece: $${cart[item][2]}</small>  
+                            <small class="text-body-secondary">Quantity: ${cart[item][0]}</small>
+                        </div>
+                    </li>
+                </ul>`;
+                $('#items').append(itemHtml);
+            }
+
+            // Calculate and display total price for all items in the cart
+            var totalPrice = Object.keys(cart).reduce(function(sum, key) {
+                return sum + (cart[key][0] * cart[key][2]);
+            }, 0);
+            var totalPriceHtml = `<div id ="totalPrice" class="total-price mt-3">
+                <h5 class="text-end">Total: $${totalPrice.toFixed(2)}</h5>
+            </div>`;
+            $('#items').append(totalPriceHtml);
+            $('#amount').val(totalPrice.toFixed(2)); 
+        });
+    </script>
+    {% endblock js %}

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> {% block title %}{% endblock title %}| BIce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        /* Remove underline from all links */
+        a {
+            text-decoration: none;
+        }
+    
+        
+        
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-grey ">
+
+
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">BIce</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/about">About Us</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="/services" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Categories
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/icecream">Ice Cream</a></li>
+                  <li><a class="dropdown-item" href="/cake">Cakes</a></li>
+                  <li><a class="dropdown-item" href="/pastries">Pastries</a></li>
+                  <li><a class="dropdown-item" href="/waffles">Waffles</a></li>
+                  <li><a class="dropdown-item" href="/donuts">Donuts</a></li>
+
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="/Premium">Premium Orders</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/contact">Contact Us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+     
+
+      <div class="bg-dark text-secondary px-4 py-5 text-center">
+        <div class="py-5">
+            <h1 class="display-5 fw-bold text-white">THANKS FOR ORDERING</h1>
+            <div class="col-lg-6 mx-auto">
+                <p class="fs-5 mb-4">Your Order will reach you shortly and will be cash on delivery </p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <button type="button" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold" ><a href="/" >Continue Ordering</a></button>
+                </div>
+                <div class="container my-4">
+                   
+                </div>
+            </div>
+        </div>
+      </div>
+
+
+
+      {% block body %}
+
+{% endblock body %}
+
+    
+    </body>
+</html>

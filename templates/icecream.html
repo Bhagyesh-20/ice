@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Ice Creams {% endblock title %}
+{% block body %}
+
+{% load static %}
+
+<div class="container">
+    <h1 class="text-center">All Ice Creams</h1>
+    
+    {% for subcategory in unique_subcategories %}
+    <h2 class="text">{{ subcategory }}</h2>
+    
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 my-3">
+        <!-- Cards for each product in the current subcategory -->
+        {% for product in icecream_products %}
+        {% if product.subcategory == subcategory %}
+        <div class="col">
+            <div class="card shadow-sm">
+                <!-- SVG image for the product card -->
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>{{ product.name }}</title>
+                    <rect width="100%" height="100%" fill="#55595c"></rect>
+                    <!-- Your SVG image content here for the product card -->
+                    <image xlink:href="/media/{{ product.image }}" width="100%" height="100%" />
+                </svg>
+                <!-- End of SVG image for the product card -->
+                <div class="card-body">
+                  <h5>{{ product.name }}</h5>
+                  <h6>{{ product.category }}</h6>
+                  <h7>{{ product.subcategory }}</h7>
+                    <p class="card-text">{{ product.description|truncatewords:5 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <span id="div{{ product.name }}">
+                                <button id="{{ product.name }}" type="button" class="btn btn-sm btn-outline-secondary cart">Add To Cart</button>
+                            </span>
+                            <h6 class="text-xl-end">${{product.price}}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock body %}
+
+{% block js %}
+<script>
+    var cart = {};
+
+    // Check if cart exists in localStorage
+    if (localStorage.getItem('cart') !== null) {
+        cart = JSON.parse(localStorage.getItem('cart'));
+        updateCartCount();
+    }
+
+    $('.cart').click(function(){
+        var idstr = this.id.toString();
+        console.log(idstr);
+        if (cart[idstr] !== undefined) {
+            cart[idstr][0]++; // Increment quantity directly
+        } else {
+            var qty = 1;
+            var name = $(this).closest('.card-body').find('h5').text(); // Fetch product name
+            var price = parseFloat($(this).closest('.card-body').find('.text-xl-end').text().substring(1)); // Extract numeric price
+            cart[idstr] = [qty, name, price]; // Store as an array
+        }
+        console.log(cart);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount(); // Update cart count after updating cart
+    });
+
+    function updateCartCount() {
+        var cartCount = Object.keys(cart).reduce(function(sum, key) {
+            return sum + cart[key][0]; // Summing up quantities
+        }, 0);
+        document.getElementById('cart').innerHTML = cartCount;
+    }
+</script>
+{% endblock js %}
