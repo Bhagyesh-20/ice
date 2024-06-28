@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 import uuid
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 # Create your models here.
 #This is where the feedback goes
 class Contact(models.Model):
@@ -21,7 +22,7 @@ class Product(models.Model):
     category = models.CharField(max_length=255,default="")
     subcategory = models.CharField(max_length=255,default="")
     description = models.CharField(max_length=250, default='', blank=True, null=True)
-    image = models.ImageField(upload_to='products')
+    image = CloudinaryField('image')
     def __str__(self):
         return self.name
 

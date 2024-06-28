@@ -14,7 +14,9 @@ import os
 from pathlib import Path
 from django.contrib.messages import constants as messages
 import cloudinary_storage
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -150,10 +152,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME' : 'ddzw98b1l',
-    'API_KEY' : '272688533579351',
-    'API_SECRET' : 'eh1Ixq7_ekk1f_V_yvr1c6ZV7V8'
-}
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+cloudinary.config(
+    cloud_name= "ddzw98b1l",
+    api_key = "272688533579351",
+    api_secret  = "eh1Ixq7_ekk1f_V_yvr1c6ZV7V8"
+)
