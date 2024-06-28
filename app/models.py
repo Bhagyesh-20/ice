@@ -21,7 +21,7 @@ class Product(models.Model):
     category = models.CharField(max_length=255,default="")
     subcategory = models.CharField(max_length=255,default="")
     description = models.CharField(max_length=250, default='', blank=True, null=True)
-    image = models.ImageField(upload_to='products/images')
+    image = models.ImageField(upload_to='products')
     def __str__(self):
         return self.name
 
